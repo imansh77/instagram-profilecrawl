@@ -3,7 +3,6 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 class Settings:
     profile_location = os.path.join(BASE_DIR, 'profiles')
     profile_commentors_location = os.path.join(BASE_DIR, 'profiles')
@@ -24,6 +23,3 @@ class Settings:
     #from Instpy
     # Set a logger cache outside object to avoid re-instantiation issues
     loggers = {}
-
-    login_username = ''
-    login_password = ''
