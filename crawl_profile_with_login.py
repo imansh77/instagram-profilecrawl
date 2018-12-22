@@ -1,9 +1,6 @@
 #!/usr/bin/env python3.5
-
 """Goes through all usernames and collects their information"""
-import json
 import sys
-import datetime
 from util.settings import Settings
 from util.datasaver import Datasaver
 
@@ -16,6 +13,7 @@ from selenium.webdriver.firefox.options import Options as Firefox_Options
 
 from util.cli_helper import get_all_user_names
 from util.extractor import extract_information
+from util.account import login
 from util.chromedriver import init_chromedriver
 
 
@@ -38,28 +36,33 @@ except Exception as exc:
     print(exc)
     sys.exit()
 
-# makes sure slower connections work as well        
-print ("Waiting 10 sec")
-browser.implicitly_wait(5)
+Settings.login_username = 'my_insta_account'
+Settings.user_password = 'my_passwort_xxx'
 
-Settings.limit_amount = 1
-Settings.scrap_posts_infos = False
 try:
-  usernames = get_all_user_names()
+    usernames = get_all_user_names()
+    for username in usernames:
+        print('Extracting information from ' + username)
+        information = []
+        user_commented_list = []
+        try:
+            if len(Settings.login_username) != 0:
+                login(browser, Settings.login_username, Settings.login_password)
+            information, user_commented_list = extract_information(browser, username, Settings.limit_amount)
+        except:
+            print("Error with user " + username)
+            sys.exit(1)
 
-  for username in usernames:
-    print('Extracting information from ' + username)
-    information = []
-    user_commented_list = []
-    try:
-      information, user_commented_list = extract_information(browser, username, Settings.limit_amount)
-    except:
-      print("Error with user " + username)
-    Datasaver.save_profile_json(username,information)
+        Datasaver.save_profile_json(username,information)
+
+        print ("Number of users who commented on his/her profile is ", len(user_commented_list),"\n")
+
+        Datasaver.save_profile_commenters_txt(username,user_commented_list)
+        print ("\nFinished. The json file and nicknames of users who commented were saved in profiles directory.\n")
 
 except KeyboardInterrupt:
-  print('Aborted...')
+    print('Aborted...')
 
 finally:
-  browser.delete_all_cookies()
-  browser.close()
+    browser.delete_all_cookies()
+    browser.close()
