@@ -21,7 +21,6 @@ Install the proper `chromedriver` for your operating system.  Once you (download
 
 ## Use it!
 Now you can start using it following this example:
-*keep in mind that entering username and password is optional*
 ```bash
 python3.5 crawl_profile.py username1 username2 ... usernameX
 ```
@@ -29,13 +28,21 @@ python3.5 crawl_profile.py username1 username2 ... usernameX
 **Settings:**
 To limit the amount of posts to be analyzed, change variable limit_amount in crawl_profile.py. Default value is 12000.\
 
-####new feature:
-**optional login:**\
-If you want to access more features(such as private accounts which you followed with yours will be accessible) you must enter your username and password in setting.py but remember its optional.\
-here are the steps to do so:
+### Optional login
+If you want to access **more features** (such as private accounts which you followed with yours will be accessible) you must enter your username and password in setting.py. Remember, it's optional.
+
+Here are the steps to do so:
 1. Open Settings.py
-2. At the button you must see `login_username` & `login_username`
+2. Search for `login_username` & `login_username`
 3. Put your information inside the quotation marks
+
+Second option:
+just the settings to your script
+```python
+Settings.login_username = 'my_insta_account'
+Settings.user_password = 'my_passwort_xxx'
+```
+
 ### Run on Raspberry Pi
 To run the crawler on Raspberry Pi with Firefox, follow these steps:
 
